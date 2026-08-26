@@ -495,17 +495,12 @@ function showPage(pageId) {
  
 pageIds.forEach(function(id) {
  
-document
-.getElementById(id)
-.classList
-.add("hidden");
+document.getElementById(id).style.display="none";
  
 });
  
 document
-.getElementById(pageId)
-.classList
-.remove("hidden");
+.getElementById(pageId).style.display="block";
  
 window.scrollTo({
 top: 0,

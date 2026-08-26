@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+<title>Next Date Planning Portal</title>
+ 
+<style>
+* {
+box-sizing: border-box;
+}
+ 
+body {
+margin: 0;
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 24px;
+font-family: Arial, sans-serif;
+color: #402c35;
+background: linear-gradient(135deg, #fff2f7, #f4eaff);
+}
+ 
+.card {
+width: 100%;
+max-width: 680px;
+padding: 34px;
+text-align: center;
+background: rgba(255, 255, 255, 0.96);
+border: 1px solid #f1d9e5;
+border-radius: 24px;
+box-shadow: 0 18px 60px rgba(92, 52, 76, 0.16);
+}
+ 
+.badge {
+display: inline-block;
+margin-bottom: 12px;
+padding: 7px 12px;
+color: #9e3e69;
+background: #ffe6f0;
+border-radius: 999px;
+font-size: 13px;
+font-weight: bold;
+letter-spacing: 0.04em;
+text-transform: uppercase;
+}
+ 
+h1 {
+margin: 8px 0 12px;
+font-size: clamp(30px, 6vw, 46px);
+}
+ 
+h2 {
+margin: 8px 0 12px;
+font-size: 28px;
+}
+ 
+p {
+line-height: 1.55;
+}
+ 
+.muted {
+color: #755f69;
+}
+ 
+.options {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+gap: 12px;
+margin-top: 24px;
+}
+ 
+button {
+min-height: 54px;
+padding: 13px 16px;
+border: 0;
+border-radius: 14px;
+cursor: pointer;
+color: white;
+background: #d94f87;
+font-size: 16px;
+font-weight: bold;
+box-shadow: 0 7px 18px rgba(217, 79, 135, 0.24);
+transition: transform 0.15s ease, background 0.15s ease;
+}
+ 
+button:hover {
+background: #c33d76;
+transform: translateY(-2px);
+}
+ 
+button:active {
+transform: translateY(0);
+}
+ 
+.secondary {
+background: #7754b7;
+}
+ 
+.secondary:hover {
+background: #6543a4;
+}
+ 
+.hidden {
+display: none !important;
+}
+ 
+.summary {
+margin: 22px 0;
+padding: 18px;
+text-align: left;
+background: #fff5f9;
+border: 1px solid #f3d6e3;
+border-radius: 16px;
+}
+ 
+.summary div {
+margin: 8px 0;
+}
+ 
+.tiny {
+margin-top: 22px;
+color: #8a737e;
+font-size: 12px;
+}
+ 
+.heart {
+font-size: 50px;
+animation: pulse 1.3s infinite;
+}
+ 
+@keyframes pulse {
+0%, 100% {
+transform: scale(1);
+}
+ 
+50% {
+transform: scale(1.12);
+}
+}
+</style>
+</head>
+ 
+<body>
+ 
+<div class="card">
+ 
+<!-- WELCOME PAGE -->
+ 
+<section id="welcomePage">
+ 
+<div class="badge">
+Application status: approved
+</div>
+ 
+<h1>Next Date Planning Portal</h1>
+ 
+<p>
+Congratulations!  You have qualified as a returning customer
+</p>
+ 
+<p class="muted">
+This highly sophisticated system has been curated by AI
+  to enhance your next Mat Lo experience.
+</p>
+ 
+<button onclick="showPage('ideaPage')">
+Proceed to Date Selection
+</button>
+ 
+<p class="tiny">
+No refunds or cancellations.  An appointment may be rescheduled if notified within a 24 hour period.
+</p>
+ 
+</section>
+ 
+ 
+<!-- DATE IDEA PAGE -->
+ 
+<section id="ideaPage" class="hidden">
+ 
+<div class="badge">
+Step 1 of approximately 2-ish
+</div>
+ 
+<h2>Choose Our Next Date</h2>
+ 
+<p class="muted">
+Select one carefully curated option:
+</p>
+ 
+<div id="dateButtons" class="options"></div>
+ 
+</section>
+ 
+ 
+<!-- FOOD SELECTION PAGE -->
+ 
+<section id="foodPage" class="hidden">
+ 
+<div class="badge">
+Important culinary research
+</div>
+ 
+<h2 id="foodHeading">
+What sounds good?
+</h2>
+ 
+<p class="muted">
+Please select a completely meaningful preference.
+</p>
+ 
+<div id="foodButtons" class="options"></div>
+ 
+</section>
+ 
+ 
+<!-- ACTIVITY FOLLOW-UP PAGE -->
+ 
+<section id="activityPage" class="hidden">
+ 
+<div class="badge">
+Guest-list department
+</div>
+ 
+<h2 id="activityHeading">
+One important question...
+</h2>
+ 
+<p id="activityQuestion"></p>
+ 
+<div id="activityButtons" class="options"></div>
+ 
+</section>
+ 
+ 
+<!-- FUNNY RESPONSE PAGE -->
+ 
+<section id="responsePage" class="hidden">
+ 
+<div class="badge">
+Preference successfully interpreted
+</div>
+ 
+<h2 id="responseTitle">
+Noted!
+</h2>
+ 
+<p id="funnyResponse"></p>
+ 
+<button onclick="showFinalPage()">
+Continue
+</button>
+ 
+</section>
+ 
+ 
+<!-- FINAL SUMMARY PAGE -->
+ 
+<section id="finalPage" class="hidden">
+ 
+<div class="heart">
+💖
+</div>
+ 
+<h1>Date Selected!</h1>
+ 
+<p>
+Your preferences have been processed with absolutely
+no bias whatsoever.
+</p>
+ 
+<div class="summary">
+ 
+<div>
+<strong>Date idea:</strong>
+<span id="summaryIdea"></span>
+</div>
+ 
+<div>
+<strong>Your answer:</strong>
+<span id="summaryAnswer"></span>
+</div>
+ 
+<div>
+<strong>Official interpretation:</strong>
+<span id="summaryInterpretation"></span>
+</div>
+ 
+<div>
+<strong>Chance of a good time:</strong>
+100%
+</div>
+ 
+</div>
+ 
+<button onclick="commitDate()">
+Accept Fate
+</button>
+ 
+<p class="tiny">
+By continuing, you acknowledge that additional dates may occur.
+</p>
+ 
+</section>
+ 
+ 
+<!-- ACCEPTED PAGE -->
+ 
+<section id="acceptedPage" class="hidden">
+ 
+<div class="heart">
+💘
+</div>
+ 
+<h1>Excellent Choice</h1>
+ 
+<p>
+The Date Planning Department has been notified.
+</p>
+ 
+<p>
+<strong>Can't wait to spend more time with you.</strong>
+</p>
+ 
+<button
+class="secondary"
+onclick="restartPlanner()"
+>
+Review Other Tempting Options
+</button>
+ 
+</section>
+ 
+</div>
+ 
+ 
+<script>
+ 
+/*
+============================================================
+ 
+EDIT THIS SECTION TO CHANGE THE DATE OPTIONS.
+ 
+The "type" must be either:
+ 
+"dinner"
+or
+"activity"
+ 
+You can keep 3, 4, or 5 date ideas.
+ 
+To remove an option, delete its entire group from the opening
+curly bracket to the closing curly bracket.
+ 
+To add an option, copy one complete group and change its content.
+ 
+============================================================
+*/
+ 
+ 
+const dateIdeas = [
+ 
+{
+label: "🍝 Sophia Bistro",
+ 
+type: "dinner",
+ 
+foods: [
+"Pizza",
+"Pasta",
+"Seafood",
+"Steak"
+]
+},
+ 
+ 
+{
+label: "🍷 Salumi",
+ 
+type: "dinner",
+ 
+foods: [
+"Wine",
+"Wine",
+"Dessert",
+"Wine",
+"Surprise me"
+]
+},
+ 
+ 
+ 
+ 
+{
+label: "💥 iSmash Farmingdale",
+ 
+type: "activity",
+ 
+question: "Would you like to bring your daughter?",
+ 
+answers: [
+"Yes",
+"No",
+"Maybe"
+]
+},
+ 
+ 
+{
+label: "🍔 American Beauty",
+ 
+type: "activity",
+ 
+question: "Shall we bring the dogs?",
+ 
+answers: [
+"Of course",
+"Just us this time"
+]
+}
+ 
+];
+ 
+ 
+/*
+All restaurant and dinner choices result in this answer.
+Change the words inside the quotation marks if desired.
+*/
+ 
+const dinnerResponse = "Ok, just wine... got it.";
+ 
+ 
+/*
+These are the responses that appear after activity answers.
+ 
+The text on the left must exactly match the text used in the
+answers section of the date idea above.
+*/
+ 
+function activityResponse(answer) {
+ 
+const responses = {
+ 
+"Yes":"Amazing.  I think she would love it!",
+"No":"That's too bad.  I bet she would enjoy it.",
+"Maybe":"The planning department will keep a VIP seat on standby.",
+"Of course":"Excellent. Barf has already cleared his schedule.",
+"Just us this time":"Sounds romantic"
+ 
+};
+ 
+return responses[answer]
+|| "Excellent selection. The planning committee approves.";
+}
+ 
+ 
+/*
+============================================================
+ 
+YOU SHOULD NOT NEED TO EDIT ANYTHING BELOW THIS LINE.
+ 
+============================================================
+*/
+ 
+ 
+let selectedIdea = null;
+let selectedAnswer = "";
+let selectedInterpretation = "";
+ 
+ 
+/*
+This is a list of every page in the survey.
+*/
+ 
+const pageIds = [
+"welcomePage",
+"ideaPage",
+"foodPage",
+"activityPage",
+"responsePage",
+"finalPage",
+"acceptedPage"
+];
+ 
+ 
+/*
+This function hides every page and then shows only the requested page.
+*/
+ 
+function showPage(pageId) {
+ 
+pageIds.forEach(function(id) {
+ 
+document
+.getElementById(id)
+.classList
+.add("hidden");
+ 
+});
+ 
+document
+.getElementById(pageId)
+.classList
+.remove("hidden");
+ 
+window.scrollTo({
+top: 0,
+behavior: "smooth"
+});
+}
+ 
+ 
+/*
+This function creates a button.
+*/
+ 
+function makeButton(text, onClick) {
+ 
+const button = document.createElement("button");
+ 
+button.textContent = text;
+ 
+button.addEventListener(
+"click",
+onClick
+);
+ 
+return button;
+}
+ 
+ 
+/*
+This function loads your date ideas onto the page.
+*/
+ 
+function loadDateIdeas() {
+ 
+const dateButtons =
+document.getElementById("dateButtons");
+ 
+dateButtons.innerHTML = "";
+ 
+dateIdeas
+.slice(0, 5)
+.forEach(function(idea) {
+ 
+const button = makeButton(
+idea.label,
+function() {
+chooseIdea(idea);
+}
+);
+ 
+dateButtons.appendChild(button);
+ 
+});
+}
+ 
+ 
+/*
+This function checks whether the selected date is dinner
+or an activity.
+*/
+ 
+function chooseIdea(idea) {
+ 
+selectedIdea = idea;
+ 
+if (idea.type === "dinner") {
+ 
+const restaurantName =
+idea.label.replace(/^\S+\s/, "");
+ 
+document
+.getElementById("foodHeading")
+.textContent =
+"What should we have for "
++ restaurantName
++ "?";
+ 
+const foodButtons =
+document.getElementById("foodButtons");
+ 
+foodButtons.innerHTML = "";
+ 
+idea.foods.forEach(function(food) {
+ 
+const button = makeButton(
+food,
+function() {
+recordDinnerAnswer(food);
+}
+);
+ 
+foodButtons.appendChild(button);
+ 
+});
+ 
+showPage("foodPage");
+ 
+} else {
+ 
+document
+.getElementById("activityHeading")
+.textContent = idea.label;
+ 
+document
+.getElementById("activityQuestion")
+.textContent = idea.question;
+ 
+const activityButtons =
+document.getElementById("activityButtons");
+ 
+activityButtons.innerHTML = "";
+ 
+idea.answers.forEach(function(answer) {
+ 
+const button = makeButton(
+answer,
+function() {
+recordActivityAnswer(answer);
+}
+);
+ 
+activityButtons.appendChild(button);
+ 
+});
+ 
+showPage("activityPage");
+}
+}
+ 
+ 
+/*
+This records a food answer.
+ 
+No matter which food is selected, the same official
+interpretation will appear.
+*/
+ 
+function recordDinnerAnswer(food) {
+ 
+selectedAnswer = food;
+ 
+selectedInterpretation =
+dinnerResponse;
+ 
+showResponse(
+"Culinary preference received",
+dinnerResponse
+);
+}
+ 
+ 
+/*
+This records an activity answer.
+*/
+ 
+function recordActivityAnswer(answer) {
+ 
+selectedAnswer = answer;
+ 
+selectedInterpretation =
+activityResponse(answer);
+ 
+showResponse(
+"Guest-list decision received",
+selectedInterpretation
+);
+}
+ 
+ 
+/*
+This displays the funny response.
+*/
+ 
+function showResponse(title, response) {
+ 
+document
+.getElementById("responseTitle")
+.textContent = title;
+ 
+document
+.getElementById("funnyResponse")
+.textContent = response;
+ 
+showPage("responsePage");
+}
+ 
+ 
+/*
+This fills in the summary page.
+*/
+ 
+function showFinalPage() {
+ 
+document
+.getElementById("summaryIdea")
+.textContent = selectedIdea.label;
+ 
+document
+.getElementById("summaryAnswer")
+.textContent = selectedAnswer;
+ 
+document
+.getElementById("summaryInterpretation")
+.textContent = selectedInterpretation;
+ 
+showPage("finalPage");
+}
+ 
+ 
+/*
+This accepts the selected date.
+*/
+ 
+function commitDate() {
+ 
+showPage("acceptedPage");
+ 
+}
+ 
+ 
+/*
+This allows the person to go back and inspect the other choices.
+*/
+ 
+function restartPlanner() {
+ 
+selectedIdea = null;
+selectedAnswer = "";
+selectedInterpretation = "";
+ 
+showPage("ideaPage");
+}
+ 
+ 
+/*
+This builds the date buttons when the website first loads.
+*/
+ 
+loadDateIdeas();
+ 
+</script>
+ 
+</body>
+</html>

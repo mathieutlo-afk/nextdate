@@ -399,6 +399,33 @@ answers: [
 ]
 },
 
+{
+label: "🥩 Vittorio's",
+
+type: "dinner",
+
+foods: [
+"Oysters",
+"Steak",
+"Pasta",
+"Seafood",
+"Surprise me"
+]
+},
+
+{
+label: "🔪 Mind Of A Serial Killer Experience",
+
+type: "activity",
+
+question: "Would your daughter also like to come?",
+
+answers: [
+"Yes",
+"No",
+"Maybe"
+]
+},
 
 {
 label: "🍔 American Beauty",
@@ -421,7 +448,12 @@ All restaurant and dinner choices result in this answer.
 Change the words inside the quotation marks if desired.
 */
 
-const dinnerResponse = "Ok, just wine... got it.";
+function getDinnerResponse(restaurant) {
+    if (restaurant === "🥩 Vittorio's") {
+      return "OMG Vittorio's!  I love this place.  Is this place too romantic? I think it's romantic. Are we ready for romantic?";
+    }
+return "Ok, just wine... got it.";
+}
 
 
 /*
@@ -632,15 +664,10 @@ function recordDinnerAnswer(food) {
 selectedAnswer = food;
 
 selectedInterpretation =
-dinnerResponse;
+getDinnerResponse(selectedIdea.label);
 
 showResponse(
 "Culinary preference received",
-dinnerResponse
-);
-}
-
-
 /*
 This records an activity answer.
 */

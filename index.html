@@ -259,7 +259,8 @@ Continue
 
 <p>
 Your preferences have been processed with absolutely
-no bias whatsoever.
+no bias whatsoever.  Also, Mathieu Lo won't actually
+be notified of your responses.
 </p>
 
 <div class="summary">
@@ -349,15 +350,15 @@ To add an option, copy one complete group and change its content.
  
 ============================================================
 */
- 
- 
+
+
 const dateIdeas = [
- 
+
 {
 label: "🍝 Sophia Bistro",
- 
+
 type: "dinner",
- 
+
 foods: [
 "Pizza",
 "Pasta",
@@ -365,13 +366,13 @@ foods: [
 "Steak"
 ]
 },
- 
- 
+
+
 {
 label: "🍷 Salumi",
- 
+
 type: "dinner",
- 
+
 foods: [
 "Wine",
 "Wine",
@@ -380,73 +381,73 @@ foods: [
 "Surprise me"
 ]
 },
- 
- 
- 
- 
+
+
+
+
 {
 label: "💥 iSmash Farmingdale",
- 
+
 type: "activity",
- 
+
 question: "Would you like to bring your daughter?",
- 
+
 answers: [
 "Yes",
 "No",
 "Maybe"
 ]
 },
- 
- 
+
+
 {
 label: "🍔 American Beauty",
- 
+
 type: "activity",
- 
+
 question: "Shall we bring the dogs?",
- 
+
 answers: [
 "Of course",
 "Just us this time"
 ]
 }
- 
+
 ];
- 
- 
+
+
 /*
 All restaurant and dinner choices result in this answer.
 Change the words inside the quotation marks if desired.
 */
- 
+
 const dinnerResponse = "Ok, just wine... got it.";
- 
- 
+
+
 /*
 These are the responses that appear after activity answers.
- 
+
 The text on the left must exactly match the text used in the
 answers section of the date idea above.
 */
- 
+
 function activityResponse(answer) {
- 
+
 const responses = {
- 
+
 "Yes":"Amazing.  I think she would love it!",
 "No":"That's too bad.  I bet she would enjoy it.",
 "Maybe":"The planning department will keep a VIP seat on standby.",
 "Of course":"Excellent. Barf has already cleared his schedule.",
 "Just us this time":"Sounds romantic"
- 
+
 };
- 
+
 return responses[answer]
 || "Excellent selection. The planning committee approves.";
 }
- 
- 
+
+
 /*
 ============================================================
  
@@ -454,17 +455,17 @@ YOU SHOULD NOT NEED TO EDIT ANYTHING BELOW THIS LINE.
  
 ============================================================
 */
- 
- 
+
+
 let selectedIdea = null;
 let selectedAnswer = "";
 let selectedInterpretation = "";
- 
- 
+
+
 /*
 This is a list of every page in the survey.
 */
- 
+
 const pageIds = [
 "welcomePage",
 "ideaPage",
@@ -474,263 +475,263 @@ const pageIds = [
 "finalPage",
 "acceptedPage"
 ];
- 
- 
+
+
 /*
 This function hides every page and then shows only the requested page.
 */
- 
+
 function showPage(pageId) {
- 
+
 pageIds.forEach(function(id) {
- 
+
 document.getElementById(id).style.display="none";
- 
+
 });
- 
+
 document
 .getElementById(pageId).style.display="block";
- 
+
 window.scrollTo({
 top: 0,
 behavior: "smooth"
 });
 }
- 
- 
+
+
 /*
 This function creates a button.
 */
- 
+
 function makeButton(text, onClick) {
- 
+
 const button = document.createElement("button");
- 
+
 button.textContent = text;
- 
+
 button.addEventListener(
 "click",
 onClick
 );
- 
+
 return button;
 }
- 
- 
+
+
 /*
 This function loads your date ideas onto the page.
 */
- 
+
 function loadDateIdeas() {
- 
+
 const dateButtons =
 document.getElementById("dateButtons");
- 
+
 dateButtons.innerHTML = "";
- 
+
 dateIdeas
 .slice(0, 5)
 .forEach(function(idea) {
- 
+
 const button = makeButton(
 idea.label,
 function() {
 chooseIdea(idea);
 }
 );
- 
+
 dateButtons.appendChild(button);
- 
+
 });
 }
- 
- 
+
+
 /*
 This function checks whether the selected date is dinner
 or an activity.
 */
- 
+
 function chooseIdea(idea) {
- 
+
 selectedIdea = idea;
- 
+
 if (idea.type === "dinner") {
- 
+
 const restaurantName =
 idea.label.replace(/^\S+\s/, "");
- 
+
 document
 .getElementById("foodHeading")
 .textContent =
 "What should we have for "
 + restaurantName
 + "?";
- 
+
 const foodButtons =
 document.getElementById("foodButtons");
- 
+
 foodButtons.innerHTML = "";
- 
+
 idea.foods.forEach(function(food) {
- 
+
 const button = makeButton(
 food,
 function() {
 recordDinnerAnswer(food);
 }
 );
- 
+
 foodButtons.appendChild(button);
- 
+
 });
- 
+
 showPage("foodPage");
- 
+
 } else {
- 
+
 document
 .getElementById("activityHeading")
 .textContent = idea.label;
- 
+
 document
 .getElementById("activityQuestion")
 .textContent = idea.question;
- 
+
 const activityButtons =
 document.getElementById("activityButtons");
- 
+
 activityButtons.innerHTML = "";
- 
+
 idea.answers.forEach(function(answer) {
- 
+
 const button = makeButton(
 answer,
 function() {
 recordActivityAnswer(answer);
 }
 );
- 
+
 activityButtons.appendChild(button);
- 
+
 });
- 
+
 showPage("activityPage");
 }
 }
- 
- 
+
+
 /*
 This records a food answer.
- 
+
 No matter which food is selected, the same official
 interpretation will appear.
 */
- 
+
 function recordDinnerAnswer(food) {
- 
+
 selectedAnswer = food;
- 
+
 selectedInterpretation =
 dinnerResponse;
- 
+
 showResponse(
 "Culinary preference received",
 dinnerResponse
 );
 }
- 
- 
+
+
 /*
 This records an activity answer.
 */
- 
+
 function recordActivityAnswer(answer) {
- 
+
 selectedAnswer = answer;
- 
+
 selectedInterpretation =
 activityResponse(answer);
- 
+
 showResponse(
 "Guest-list decision received",
 selectedInterpretation
 );
 }
- 
- 
+
+
 /*
 This displays the funny response.
 */
- 
+
 function showResponse(title, response) {
- 
+
 document
 .getElementById("responseTitle")
 .textContent = title;
- 
+
 document
 .getElementById("funnyResponse")
 .textContent = response;
- 
+
 showPage("responsePage");
 }
- 
- 
+
+
 /*
 This fills in the summary page.
 */
- 
+
 function showFinalPage() {
- 
+
 document
 .getElementById("summaryIdea")
 .textContent = selectedIdea.label;
- 
+
 document
 .getElementById("summaryAnswer")
 .textContent = selectedAnswer;
- 
+
 document
 .getElementById("summaryInterpretation")
 .textContent = selectedInterpretation;
- 
+
 showPage("finalPage");
 }
- 
- 
+
+
 /*
 This accepts the selected date.
 */
- 
+
 function commitDate() {
- 
+
 showPage("acceptedPage");
- 
+
 }
- 
- 
+
+
 /*
 This allows the person to go back and inspect the other choices.
 */
- 
+
 function restartPlanner() {
- 
+
 selectedIdea = null;
 selectedAnswer = "";
 selectedInterpretation = "";
- 
+
 showPage("ideaPage");
 }
- 
- 
+
+
 /*
 This builds the date buttons when the website first loads.
 */
- 
+
 loadDateIdeas();
- 
+
 </script>
 
- </script>
+</script>
 </body>
 </html>
